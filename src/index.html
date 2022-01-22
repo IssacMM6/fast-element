@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script src="./index.js"></script>
+    <script>
+      const [Display] = useRoot("root");
+      let init = {
+        counter: 0,
+      };
+
+      function SusBtn(value, callback, refresh) {
+        const [SuccessBtn, BtnIndicator, BtnLabel] = useElement(
+          useElementRepeat("div", 3)
+        );
+
+        BtnIndicator.text(value);
+        BtnLabel.text("PRESS");
+        SuccessBtn.append(BtnIndicator, BtnLabel);
+
+        const [applyBtnStyle] = useStyle(SuccessBtn, BtnIndicator, BtnLabel);
+
+        applyBtnStyle([
+          { 
+            display: "inline-block",
+            backgroundColor: "#80f980",
+            fontFamily: "sans-serif",
+            width: "max-content",
+            padding: "5px 7px",
+            borderRadius: "4px",
+          },
+          {
+            display: "inline-block",
+            backgroundColor: "#ffffff",
+            padding: "1px 5px",
+            borderRadius: "4px",
+            marginRight: "4px",
+          },
+          {
+            color: "#31bb31",
+            display: "inline-block",
+          },
+        ]);
+
+        createPseudo(`
+        .select-none{
+          user-select: none;
+          -webkit-user-select:none;
+          -moz-user-select:none;
+        }`);
+
+        SuccessBtn.set("class", "select-none");
+
+        const [SuccessBtnAction, removeActionSuccessBtn] = useListener(
+          "click",
+          SuccessBtn
+        );
+
+        SuccessBtnAction(() => {
+          callback(BtnIndicator);
+          refresh();
+          removeActionSuccessBtn();
+        });
+
+        return SuccessBtn;
+      }
+
+      function Banner(value) {
+        const [BannerCon, Discription, indicator] = useElement(
+          useElementRepeat("div", 3)
+        );
+        Discription.text("You have been clicked : ");
+        indicator.text(value);
+        BannerCon.append(Discription, indicator);
+
+        const [applyBannerStyle] = useStyle(BannerCon, Discription, indicator);
+
+        applyBannerStyle([
+          {
+            display: "inline-block",
+            backgroundColor: "#ffffff",
+            fontFamily: "sans-serif",
+            width: "max-content",
+            padding: "5px 7px",
+          },
+          {
+            display: "inline-block",
+            backgroundColor: "#ffffff",
+            padding: "1px 5px",
+            borderRadius: "4px",
+            marginRight: "4px",
+          },
+          {
+            display: "inline-block",
+            backgroundColor: "#ffffff",
+            padding: "1px 5px",
+            borderRadius: "4px",
+            marginRight: "4px",
+          },
+        ]);
+
+        return BannerCon;
+      }
+
+      function increment(node) {
+        init.counter = init.counter + 1;
+        node.text(init.counter);
+      }
+
+      function render() {
+        Display.removeAll();
+        Display.append(SusBtn(init.counter, increment, render));
+        Display.append(Banner(init.counter));
+      }
+
+      render();
+    </script>
+  </body>
+</html>
