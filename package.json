@@ -4,7 +4,8 @@
   "description": "",
   "main": "./src/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "ts:controller": "tsc --target es2015 --noEmitOnError --removeComments ./src/ts/fastelement.ts --outDir ./src/js/",
+    "ts:circle": "tsc --target es2015 --noEmitOnError --removeComments ./src/circlejs/circle.ts"
   },
   "keywords": [],
   "author": "",
